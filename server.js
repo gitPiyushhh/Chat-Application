@@ -1,3 +1,4 @@
+const { signup, login } = require("./controller");
 const authRouter = require("./routes");
 const express = require("express");
 const app = express();
@@ -9,13 +10,27 @@ http.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
+/* 
+  Middlewares
+*/
+app.use(express.json());
+
 app.use(express.static(__dirname + "/public"));
 
+/* 
+  Route moumting
+*/
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.use("/api/v1/auth", authRouter);
+app.get("/auth", (req, res) => {
+  res.sendFile(__dirname + "/auth.html");
+});
+
+app.post("/signup", signup);
+app.post("/login", login);
+
 // Socket
 const io = require("socket.io")(http);
 
